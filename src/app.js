@@ -6,9 +6,8 @@ const PORT = 8080;
 
 app.use(express.urlencoded({ extended: true }));
 
-let products = await new ProductManager("./file").getProducts();
-
-app.get("/products", (req, res) => {
+app.get("/products", async (req, res) => {
+  let products = await new ProductManager("./file").getProducts();
   let limit = req.query.limit;
 
   if (!limit) return res.send({ products });
@@ -25,7 +24,8 @@ app.get("/products", (req, res) => {
   res.send({ products: userLimit });
 });
 
-app.get("/products/:pid", (req, res) => {
+app.get("/products/:pid", async (req, res) => {
+  let products = await new ProductManager("./file").getProducts();
   let pid = req.params.pid;
   let product = products.find((u) => u.id == pid);
 
