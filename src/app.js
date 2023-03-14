@@ -11,9 +11,8 @@ let products = await new ProductManager("./file").getProducts();
 app.get("/products", (req, res) => {
   let limit = req.query.limit;
 
-  if (!limit) {
-    return res.send({ products });
-  }
+  if (!limit) return res.send({ products });
+
   const userLimit = [];
   let i = 0;
   products.filter((p) => {
