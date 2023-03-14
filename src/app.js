@@ -6,22 +6,13 @@ const PORT = 8080;
 
 app.use(express.urlencoded({ extended: true }));
 
+// endpoints
 app.get("/products", async (req, res) => {
   let products = await new ProductManager("./file").getProducts();
   let limit = req.query.limit;
 
   if (!limit) return res.send({ products });
-
-  const userLimit = [];
-  let i = 0;
-  products.filter((p) => {
-    if (i < limit) {
-      userLimit.push(p);
-      i++;
-    }
-  });
-
-  res.send({ products: userLimit });
+  res.send({ products: products.slice(0, limit) });
 });
 
 app.get("/products/:pid", async (req, res) => {
@@ -33,4 +24,5 @@ app.get("/products/:pid", async (req, res) => {
   res.send({ product: product });
 });
 
+// lanzar server
 app.listen(PORT, () => console.log(`Servidor escuchando en el puerto ${PORT}`));
