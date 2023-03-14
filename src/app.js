@@ -3,24 +3,21 @@ import ProductManager from "./controller/productManager.js";
 
 const app = express();
 const PORT = 8080;
-const path = "./file";
+const pm = new ProductManager("./file");
 
 app.use(express.urlencoded({ extended: true }));
 
 // endpoints
 app.get("/products", async (req, res) => {
-  let products = await new ProductManager(path).getProducts();
+  let products = await pm.getProducts();
   let limit = req.query.limit;
 
-  if (!limit) return res.send({ products });
-  res.send({ products: products.slice(0, limit) });
+  res.send({ products: !limit ? products : products.slice(0, limit) });
 });
 
 app.get("/products/:pid", async (req, res) => {
   res.send({
-    product: await new ProductManager(path).getProductById(
-      Number.parseInt(req.params.pid)
-    ),
+    product: await pm.getProductById(Number.parseInt(req.params.pid)),
   });
 });
 
